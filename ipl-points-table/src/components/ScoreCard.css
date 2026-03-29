@@ -1,0 +1,114 @@
+:root{
+  --color-red:#e8193c;
+  --color-blue-light:#46b8f0;
+  --color-blue-dark:#123e73;
+  --font-display:'Arial Black',Arial,sans-serif;
+  --skew:polygon(2% 0%,100% 0%,98% 100%,0% 100%);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+/* HOST — fill viewport, no scrollbars/panning */
+.sc-scale-host{
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  background:#000;
+  position:relative;
+}
+
+/* CANVAS — portrait 1080×1920, never reflows */
+.sc-canvas{
+  width:1080px;height:1920px;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform-origin:center center;
+  overflow:hidden;
+}
+
+/* FULL BG */
+.sc-bg{
+  width:100%;height:100%;
+  background-image:url('/assets/score-bg.png');
+  background-size:cover;background-position:center;
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* PLAYERS */
+.sc-player-bat{position:absolute;left:-20px;bottom:280px;height:55%;width:auto;z-index:1;pointer-events:none;}
+.sc-player-bowl{position:absolute;right:-10px;bottom:80px;height:40%;width:auto;z-index:1;pointer-events:none;}
+
+/* TITLE */
+.sc-title{
+  width:100%;display:flex;justify-content:center;align-items:center;
+  padding:6vh 4vw 2vh 4vw;z-index:2;
+}
+.sc-title img{height:28vh;width:auto;max-width:80%;object-fit:contain;}
+
+/* GLASS */
+.sc-glass{
+  width:90%;z-index:2;position:relative;
+  background:transparent;border-radius:22px;
+  border:1.5px solid rgba(255,255,255,0.18);
+  box-shadow:0 8px 48px rgba(0,0,0,0.7);
+  padding:3vh 3vw;
+  display:flex;flex-direction:column;gap:0;
+}
+
+.sc-match-name{
+  font-family:var(--font-display);font-size:1.6vh;font-weight:700;
+  color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;
+  text-align:center;margin-bottom:2vh;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+.sc-team-block{display:flex;flex-direction:column;margin-bottom:1.6vh;}
+
+.sc-ribbon{
+  display:grid;grid-template-columns:1fr auto;
+  align-items:center;background:var(--color-red);
+  clip-path:var(--skew);padding:0 3vw;height:8vh;
+}
+
+.sc-team-name{font-family:var(--font-display);font-size:3vh;font-weight:900;color:#fff;letter-spacing:0.1em;text-transform:uppercase;}
+.sc-score{display:flex;align-items:baseline;justify-content:flex-end;gap:0.5vw;}
+.sc-score-runs{font-family:var(--font-display);font-size:3.6vh;font-weight:900;color:#fff;}
+.sc-score-wkt{font-family:var(--font-display);font-size:2.6vh;font-weight:700;color:rgba(255,255,255,0.75);}
+.sc-score-ov{font-family:var(--font-display);font-size:1.8vh;font-weight:700;color:rgba(255,255,255,0.55);}
+
+.sc-stats-row{
+  display:grid;grid-template-columns:1fr auto;
+  align-items:center;clip-path:var(--skew);
+  padding:0 3vw;height:11vh;margin-top:0.6vh;gap:2vw;
+}
+.sc-stats-row--blue{background:var(--color-blue-light);}
+.sc-stats-row--navy{background:var(--color-blue-dark);}
+
+.sc-batsmen{display:flex;flex-direction:column;gap:0.6vh;}
+.sc-batsman{display:flex;align-items:center;gap:1.6vw;}
+.sc-batsman-name{font-family:var(--font-display);font-size:2.2vh;font-weight:700;color:#000;text-transform:uppercase;min-width:38vw;}
+.sc-batsman-runs{font-family:var(--font-display);font-size:2.6vh;font-weight:900;color:#000;}
+.sc-stats-row--navy .sc-batsman-name{color:#fff;}
+.sc-stats-row--navy .sc-batsman-runs{color:#fff;}
+
+.sc-bowler{display:flex;flex-direction:column;align-items:flex-end;gap:0.4vh;}
+.sc-bowler-label{font-family:var(--font-display);font-size:1.4vh;font-weight:700;color:rgba(0,0,0,0.5);letter-spacing:0.1em;text-transform:uppercase;}
+.sc-bowler-name{font-family:var(--font-display);font-size:2vh;font-weight:900;color:#000;text-transform:uppercase;text-align:right;}
+.sc-bowler-figures{display:flex;gap:1.4vw;}
+.sc-bowler-fig{display:flex;flex-direction:column;align-items:center;}
+.sc-fig-label{font-family:var(--font-display);font-size:1.2vh;font-weight:700;color:rgba(0,0,0,0.45);}
+.sc-fig-val{font-family:var(--font-display);font-size:2.2vh;font-weight:900;color:#000;}
+
+.sc-yet-to-bat{font-family:var(--font-display);font-size:2vh;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;text-align:center;width:100%;}
+
+.sc-branding{display:flex;flex-direction:column;align-items:center;gap:1vh;margin-top:2.4vh;padding-top:2vh;border-top:1px solid rgba(255,255,255,0.15);}
+.sc-branding-label{font-family:Arial,sans-serif;font-size:1.4vh;color:#aaa;letter-spacing:0.05em;}
+.sc-branding-logo{height:5vh;width:auto;object-fit:contain;}
+
+.sc-dots{display:flex;justify-content:center;gap:1vw;margin-top:1.6vh;}
+.sc-dot{width:1vh;height:1vh;border-radius:50%;background:rgba(255,255,255,0.25);transition:background 0.3s;}
+.sc-dot--active{background:#fff;}
+
+.sc-fade-out{opacity:0;transition:opacity 0.35s ease;}
+.sc-fade-in{opacity:1;transition:opacity 0.35s ease;}

@@ -1,0 +1,244 @@
+{"sport": "cricket",
+    "groups": [
+        {
+            "group_name": "Group A",
+            "team": [
+                {
+                    "games": "2",
+                    "id": "2387",
+                    "lost": "0",
+                    "name": "Pakistan",
+                    "nr": "0",
+                    "points": "4",
+                    "pos": "1",
+                    "tied": "0",
+                    "won": "2"
+                },
+                {
+                    "games": "1",
+                    "id": "2403",
+                    "lost": "0",
+                    "name": "India",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "2",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "2",
+                    "id": "2423",
+                    "lost": "1",
+                    "name": "Netherlands",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "3",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "1",
+                    "id": "2419",
+                    "lost": "1",
+                    "name": "Namibia",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "4",
+                    "tied": "0",
+                    "won": "0"
+                },
+                {
+                    "games": "2",
+                    "id": "2524",
+                    "lost": "2",
+                    "name": "United States of America",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "5",
+                    "tied": "0",
+                    "won": "0"
+                }
+            ]
+        },
+        {
+            "group_name": "Group B",
+            "team": [
+                {
+                    "games": "1",
+                    "id": "2428",
+                    "lost": "0",
+                    "name": "Zimbabwe",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "1",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "1",
+                    "id": "2405",
+                    "lost": "0",
+                    "name": "Sri Lanka",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "2",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "1",
+                    "id": "2378",
+                    "lost": "1",
+                    "name": "Ireland",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "3",
+                    "tied": "0",
+                    "won": "0"
+                },
+                {
+                    "games": "1",
+                    "id": "2662",
+                    "lost": "1",
+                    "name": "Oman",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "4",
+                    "tied": "0",
+                    "won": "0"
+                },
+                {
+                    "games": "0",
+                    "id": "2402",
+                    "lost": "0",
+                    "name": "Australia",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "0",
+                    "tied": "0",
+                    "won": "0"
+                }
+            ]
+        },
+        {
+            "group_name": "Group C",
+            "team": [
+                {
+                    "games": "1",
+                    "id": "2489",
+                    "lost": "0",
+                    "name": "West Indies",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "1",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "2",
+                    "id": "2424",
+                    "lost": "1",
+                    "name": "Scotland",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "2",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "1",
+                    "id": "2386",
+                    "lost": "0",
+                    "name": "England",
+                    "nr": "0",
+                    "points": "2",
+                    "pos": "3",
+                    "tied": "0",
+                    "won": "1"
+                },
+                {
+                    "games": "1",
+                    "id": "2523",
+                    "lost": "1",
+                    "name": "Nepal",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "4",
+                    "tied": "0",
+                    "won": "0"
+                },
+                {
+                    "games": "1",
+                    "id": "2527",
+                    "lost": "1",
+                    "name": "Italy",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "5",
+                    "tied": "0",
+                    "won": "0"
+                }
+            ]
+        },
+        {
+            "group_name": "Group D",
+            "team": [
+                {
+                    "games": "2",
+                    "id": "2401",
+                    "lost": "0",
+                    "name": "New Zealand",
+                    "nr": "0",
+                    "points": "4",
+                    "pos": "1",
+                    "tied": "0",
+                    "won": "2"
+                },
+                {
+                    "games": "2",
+                    "id": "2432",
+                    "lost": "0",
+                    "name": "South Africa",
+                    "nr": "0",
+                    "points": "4",
+                    "pos": "2",
+                    "tied": "0",
+                    "won": "2"
+                },
+                {
+                    "games": "2",
+                    "id": "2429",
+                    "lost": "2",
+                    "name": "Afghanistan",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "3",
+                    "tied": "0",
+                    "won": "0"
+                },
+                {
+                    "games": "1",
+                    "id": "2493",
+                    "lost": "1",
+                    "name": "United Arab Emirates",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "4",
+                    "tied": "0",
+                    "won": "0"
+                },
+                {
+                    "games": "1",
+                    "id": "2379",
+                    "lost": "1",
+                    "name": "Canada",
+                    "nr": "0",
+                    "points": "0",
+                    "pos": "5",
+                    "tied": "0",
+                    "won": "0"
+                }
+            ]
+        }
+    ]
+}
