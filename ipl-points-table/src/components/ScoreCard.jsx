@@ -2,31 +2,42 @@ import { useState, useEffect, useRef } from 'react';
 import './ScoreCard.css';
 import scoreData from '../data/score.json';
 
-function ScoreCard({ data = scoreData, campaignWidth = '80%', mid }) {
+function ScoreCard({ data = scoreData }) {
 
   const hostRef = useRef(null);
-  const [scale, setScale] = useState(1);
+  const [layout, setLayout] = useState({ scale: 1, left: 0, top: 0 });
 
   useEffect(() => {
-    function computeScale() {
+    function computeLayout() {
       if (!hostRef.current) return;
-      const hostW = hostRef.current.clientWidth;
-      const hostH = hostRef.current.clientHeight;
-      const fraction = parseFloat(campaignWidth) / 100;
-      const BASE_W = 1080;
-      const BASE_H = 1920;
-      const fit = Math.min(hostW / BASE_W, hostH / BASE_H);
-      const cover = Math.max(hostW / BASE_W, hostH / BASE_H);
-      const base = fraction >= 0.999 ? cover : fit;
-      setScale(base * fraction);
-    }
-    computeScale();
-    const ro = new ResizeObserver(computeScale);
-    ro.observe(hostRef.current);
-    return () => ro.disconnect();
-  }, [campaignWidth]);
+      const hostRect = hostRef.current.getBoundingClientRect();
+      const hostW = hostRect.width;
+      const hostH = hostRect.height;
+      const baseW = 1080;
+      const baseH = 1920;
+      const scale = Math.max(hostW / baseW, hostH / baseH);
 
-  const matches = mid && data?.[mid] ? [data[mid]] : Object.values(data || {});
+      // Uniform cover scale: both axes zoom equally.
+      // If aspect ratios differ, overflow is cropped (no black bars).
+      setLayout({
+        scale,
+        left: (hostW - baseW * scale) / 2,
+        top:  (hostH - baseH * scale) / 2,
+      });
+    }
+    computeLayout();
+
+    const ro = new ResizeObserver(computeLayout);
+    ro.observe(hostRef.current);
+    window.addEventListener('resize', computeLayout);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', computeLayout);
+    };
+  }, []);
+
+  const matches = Object.values(data || {});
   const [activeIdx, setActiveIdx] = useState(0);
   const [isFading,  setIsFading]  = useState(false);
 
@@ -45,7 +56,7 @@ function ScoreCard({ data = scoreData, campaignWidth = '80%', mid }) {
   const match = matches[activeIdx];
   if (!match) return null;
 
-  const { batsmanstats, bowlerstats, name } = match;
+  const { batsmanstats, bowlerstats } = match;
 
   function parseScore(s) {
     if (!s || s === '—') return { runs: '—', overs: '' };
@@ -58,99 +69,85 @@ function ScoreCard({ data = scoreData, campaignWidth = '80%', mid }) {
   const hasBowlingScore = !!bowlerstats.bowlerstatsscore;
 
   return (
-    <div className="sc-scale-host" ref={hostRef}>
-      <div className="sc-canvas" style={{ transform:`translate(-50%, -50%) scale(${scale})` }}>
+    <div className="sc-host" ref={hostRef}>
+      <div className="sc-canvas" style={{
+        transform: `scale(${layout.scale})`,
+        transformOrigin: 'top left',
+        left: layout.left,
+        top:  layout.top,
+      }}>
         <div className="sc-bg">
-
-          <img className="sc-player-bat"  src="/assets/batsman.png" alt=""
-            onError={e=>{e.currentTarget.style.display='none'}}/>
-          <img className="sc-player-bowl" src="/assets/bowler.png"  alt=""
-            onError={e=>{e.currentTarget.style.display='none'}}/>
 
           <div className="sc-title">
             <img src="/assets/score-title.png" alt="What's the Score"
               onError={e=>{e.currentTarget.style.display='none'}}/>
           </div>
 
-          <div className="sc-glass">
-            <div className="sc-match-name">{name}</div>
+          <div className={isFading ? 'sc-fade-out' : 'sc-fade-in'}>
 
-            <div className={isFading ? 'sc-fade-out' : 'sc-fade-in'}>
-
-              {/* BATTING TEAM */}
-              <div className="sc-team-block">
-                <div className="sc-ribbon">
-                  <span className="sc-team-name">{batsmanstats.teamname}</span>
-                  <div className="sc-score">
-                    <span className="sc-score-runs">{batting.runs}</span>
-                    <span className="sc-score-wkt">/{batsmanstats.battingwicket}</span>
-                    {batting.overs && <span className="sc-score-ov">({batting.overs} ov)</span>}
-                  </div>
+            <div className="sc-block">
+              <img className="sc-player sc-player--bat" src="/assets/batsman.png" alt=""
+                onError={e=>{e.currentTarget.style.display='none'}}/>
+              <div className="sc-ribbon sc-ribbon--right">
+                <span className="sc-team-name">{batsmanstats.teamname}</span>
+                <span className="sc-team-score">
+                  {batting.runs}/{batsmanstats.battingwicket}
+                  {batting.overs && <span className="sc-overs"> ({batting.overs} ov)</span>}
+                </span>
+              </div>
+              <div className="sc-strip sc-strip--right"/>
+              <div className="sc-stats sc-stats--right">
+                <div className="sc-batsmen">
+                  {[batsmanstats.batsman_0, batsmanstats.batsman_1].filter(Boolean).map((b,i)=>(
+                    <div key={i} className="sc-batsman-row">
+                      <span className="sc-batsman-name">{b.batsmanname}</span>
+                      <span className="sc-batsman-runs">{b.run}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="sc-stats-row sc-stats-row--blue">
-                  <div className="sc-batsmen">
-                    {[batsmanstats.batsman_0, batsmanstats.batsman_1].filter(Boolean).map((b,i)=>(
-                      <div key={i} className="sc-batsman">
-                        <span className="sc-batsman-name">{b.batsmanname}</span>
-                        <span className="sc-batsman-runs">{b.run}</span>
+                <div className="sc-divider"/>
+              </div>
+            </div>
+
+            <div className="sc-block">
+              <img className="sc-player sc-player--bowl" src="/assets/bowler.png" alt=""
+                onError={e=>{e.currentTarget.style.display='none'}}/>
+              <div className="sc-ribbon sc-ribbon--left">
+                <span className="sc-team-name">{bowlerstats.teamname}</span>
+                <span className="sc-team-score">
+                  {hasBowlingScore
+                    ? <>{bowling.runs}/{bowlerstats.bowlerstatswicket}{bowling.overs && <span className="sc-overs"> ({bowling.overs} ov)</span>}</>
+                    : 'Yet to bat'
+                  }
+                </span>
+              </div>
+              <div className="sc-strip sc-strip--left"/>
+              <div className="sc-stats sc-stats--left">
+                <div className="sc-bowler-row">
+                  <span className="sc-bowler-name">{bowlerstats.bowler}</span>
+                  <div className="sc-bowler-figs">
+                    {[{l:'O',v:bowlerstats.o},{l:'M',v:bowlerstats.m},{l:'R',v:bowlerstats.r},{l:'W',v:bowlerstats.w}].map(f=>(
+                      <div key={f.l} className="sc-fig">
+                        <span className="sc-fig-label">{f.l}</span>
+                        <span className="sc-fig-val">{f.v}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="sc-bowler">
-                    <span className="sc-bowler-label">Bowling</span>
-                    <span className="sc-bowler-name">{bowlerstats.bowler}</span>
-                    <div className="sc-bowler-figures">
-                      {[{l:'O',v:bowlerstats.o},{l:'M',v:bowlerstats.m},{l:'R',v:bowlerstats.r},{l:'W',v:bowlerstats.w}].map(f=>(
-                        <div key={f.l} className="sc-bowler-fig">
-                          <span className="sc-fig-label">{f.l}</span>
-                          <span className="sc-fig-val">{f.v}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
+                <div className="sc-divider"/>
               </div>
-
-              {/* BOWLING TEAM */}
-              <div className="sc-team-block">
-                <div className="sc-ribbon">
-                  <span className="sc-team-name">{bowlerstats.teamname}</span>
-                  <div className="sc-score">
-                    {hasBowlingScore ? (
-                      <>
-                        <span className="sc-score-runs">{bowling.runs}</span>
-                        <span className="sc-score-wkt">/{bowlerstats.bowlerstatswicket}</span>
-                        {bowling.overs && <span className="sc-score-ov">({bowling.overs} ov)</span>}
-                      </>
-                    ) : (
-                      <span className="sc-score-runs" style={{fontSize:'2.4vh',opacity:0.8}}>Yet to bat</span>
-                    )}
-                  </div>
-                </div>
-                <div className="sc-stats-row sc-stats-row--navy">
-                  <span className="sc-yet-to-bat">
-                    {hasBowlingScore ? 'Previous innings' : 'Waiting to bat'}
-                  </span>
-                </div>
-              </div>
-
-            </div>
-
-            {matches.length > 1 && (
-              <div className="sc-dots">
-                {matches.map((_,i)=>(
-                  <div key={i} className={`sc-dot${i===activeIdx?' sc-dot--active':''}`}/>
-                ))}
-              </div>
-            )}
-
-            <div className="sc-branding">
-              <span className="sc-branding-label">brought to you by</span>
-              <img className="sc-branding-logo" src="/assets/times-ooh-logo.png" alt="Times OOH"
-                onError={e=>{e.currentTarget.style.display='none'}}/>
             </div>
 
           </div>
+
+          {matches.length > 1 && (
+            <div className="sc-dots">
+              {matches.map((_,i)=>(
+                <div key={i} className={`sc-dot${i===activeIdx?' sc-dot--active':''}`}/>
+              ))}
+            </div>
+          )}
+
         </div>
       </div>
     </div>

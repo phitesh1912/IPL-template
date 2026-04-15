@@ -1,114 +1,144 @@
 :root{
-  --color-red:#e8193c;
-  --color-blue-light:#46b8f0;
-  --color-blue-dark:#123e73;
-  --font-display:'Arial Black',Arial,sans-serif;
-  --skew:polygon(2% 0%,100% 0%,98% 100%,0% 100%);
+  --red:#e8193c;
+  --blue:#46b8f0;
+  --black:#0a0a0a;
+  --font:'Futura','Arial Black',Arial,sans-serif;
 }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 
-/* HOST — fill viewport, no scrollbars/panning */
-.sc-scale-host{
-  width:100vw;
-  height:100vh;
+html,body,#root{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:auto;
+  background:#000;
+}
+
+/* ─── HOST — fills parent container, scalable ─── */
+.sc-host{
+  position:relative;
+  width:100%;
+  height:100%;
   overflow:hidden;
   background:#000;
-  position:relative;
 }
 
-/* CANVAS — portrait 1080×1920, never reflows */
+/* ─── CANVAS — 1080×1920 design space, scaled & centered via JS ─── */
 .sc-canvas{
-  width:1080px;height:1920px;
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform-origin:center center;
+  width:1080px;
+  height:1920px;
+  flex-shrink:0;
   overflow:hidden;
+  position:absolute;
+  z-index:1;
 }
 
-/* FULL BG */
 .sc-bg{
-  width:100%;height:100%;
+  width:100%;
+  height:100%;
   background-image:url('/assets/score-bg.png');
-  background-size:cover;background-position:center;
+  background-size:100% 100%;
+  background-position:center;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
   position:relative;
-  display:flex;flex-direction:column;align-items:center;
 }
 
-/* PLAYERS */
-.sc-player-bat{position:absolute;left:-20px;bottom:280px;height:55%;width:auto;z-index:1;pointer-events:none;}
-.sc-player-bowl{position:absolute;right:-10px;bottom:80px;height:40%;width:auto;z-index:1;pointer-events:none;}
+/* ─── TITLE ─── */
+.sc-title{display:flex;justify-content:center;padding:60px 0 40px;z-index:5;}
+.sc-title img{height:420px;width:auto;max-width:85%;object-fit:contain;}
 
-/* TITLE */
-.sc-title{
-  width:100%;display:flex;justify-content:center;align-items:center;
-  padding:6vh 4vw 2vh 4vw;z-index:2;
-}
-.sc-title img{height:28vh;width:auto;max-width:80%;object-fit:contain;}
-
-/* GLASS */
-.sc-glass{
-  width:90%;z-index:2;position:relative;
-  background:transparent;border-radius:22px;
-  border:1.5px solid rgba(255,255,255,0.18);
-  box-shadow:0 8px 48px rgba(0,0,0,0.7);
-  padding:3vh 3vw;
-  display:flex;flex-direction:column;gap:0;
-}
-
-.sc-match-name{
-  font-family:var(--font-display);font-size:1.6vh;font-weight:700;
-  color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;
-  text-align:center;margin-bottom:2vh;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-
-.sc-team-block{display:flex;flex-direction:column;margin-bottom:1.6vh;}
-
-.sc-ribbon{
-  display:grid;grid-template-columns:1fr auto;
-  align-items:center;background:var(--color-red);
-  clip-path:var(--skew);padding:0 3vw;height:8vh;
-}
-
-.sc-team-name{font-family:var(--font-display);font-size:3vh;font-weight:900;color:#fff;letter-spacing:0.1em;text-transform:uppercase;}
-.sc-score{display:flex;align-items:baseline;justify-content:flex-end;gap:0.5vw;}
-.sc-score-runs{font-family:var(--font-display);font-size:3.6vh;font-weight:900;color:#fff;}
-.sc-score-wkt{font-family:var(--font-display);font-size:2.6vh;font-weight:700;color:rgba(255,255,255,0.75);}
-.sc-score-ov{font-family:var(--font-display);font-size:1.8vh;font-weight:700;color:rgba(255,255,255,0.55);}
-
-.sc-stats-row{
-  display:grid;grid-template-columns:1fr auto;
-  align-items:center;clip-path:var(--skew);
-  padding:0 3vw;height:11vh;margin-top:0.6vh;gap:2vw;
-}
-.sc-stats-row--blue{background:var(--color-blue-light);}
-.sc-stats-row--navy{background:var(--color-blue-dark);}
-
-.sc-batsmen{display:flex;flex-direction:column;gap:0.6vh;}
-.sc-batsman{display:flex;align-items:center;gap:1.6vw;}
-.sc-batsman-name{font-family:var(--font-display);font-size:2.2vh;font-weight:700;color:#000;text-transform:uppercase;min-width:38vw;}
-.sc-batsman-runs{font-family:var(--font-display);font-size:2.6vh;font-weight:900;color:#000;}
-.sc-stats-row--navy .sc-batsman-name{color:#fff;}
-.sc-stats-row--navy .sc-batsman-runs{color:#fff;}
-
-.sc-bowler{display:flex;flex-direction:column;align-items:flex-end;gap:0.4vh;}
-.sc-bowler-label{font-family:var(--font-display);font-size:1.4vh;font-weight:700;color:rgba(0,0,0,0.5);letter-spacing:0.1em;text-transform:uppercase;}
-.sc-bowler-name{font-family:var(--font-display);font-size:2vh;font-weight:900;color:#000;text-transform:uppercase;text-align:right;}
-.sc-bowler-figures{display:flex;gap:1.4vw;}
-.sc-bowler-fig{display:flex;flex-direction:column;align-items:center;}
-.sc-fig-label{font-family:var(--font-display);font-size:1.2vh;font-weight:700;color:rgba(0,0,0,0.45);}
-.sc-fig-val{font-family:var(--font-display);font-size:2.2vh;font-weight:900;color:#000;}
-
-.sc-yet-to-bat{font-family:var(--font-display);font-size:2vh;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;text-align:center;width:100%;}
-
-.sc-branding{display:flex;flex-direction:column;align-items:center;gap:1vh;margin-top:2.4vh;padding-top:2vh;border-top:1px solid rgba(255,255,255,0.15);}
-.sc-branding-label{font-family:Arial,sans-serif;font-size:1.4vh;color:#aaa;letter-spacing:0.05em;}
-.sc-branding-logo{height:5vh;width:auto;object-fit:contain;}
-
-.sc-dots{display:flex;justify-content:center;gap:1vw;margin-top:1.6vh;}
-.sc-dot{width:1vh;height:1vh;border-radius:50%;background:rgba(255,255,255,0.25);transition:background 0.3s;}
-.sc-dot--active{background:#fff;}
-
+/* ─── TRANSITIONS ─── */
 .sc-fade-out{opacity:0;transition:opacity 0.35s ease;}
-.sc-fade-in{opacity:1;transition:opacity 0.35s ease;}
+.sc-fade-in {opacity:1;transition:opacity 0.35s ease;}
+
+/* ─── BLOCK ─── */
+.sc-block{position:relative;margin-bottom:50px;}
+
+/* ─── PLAYER IMAGES — cropped to player figure only ─── */
+.sc-player{
+  position:absolute;
+  z-index:10;
+  pointer-events:none;
+  width:300px;
+  height:580px;
+  object-fit:cover;
+  object-position:left top;
+}
+.sc-player--bat {left:0;bottom:0;}
+.sc-player--bowl{right:0;bottom:0;transform:scaleX(-1);}
+
+/* ═══════════════════════════════════════════════════
+   RED RIBBON — team name + score
+   Proportions matched to template: ~72→82% batting
+   ═══════════════════════════════════════════════════ */
+.sc-ribbon{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--red);height:120px;position:relative;z-index:3;
+}
+.sc-ribbon--right{
+  clip-path:polygon(0 0, 72% 0, 82% 100%, 0 100%);
+  padding:0 310px 0 310px;
+}
+.sc-ribbon--left{
+  clip-path:polygon(28% 0, 100% 0, 100% 100%, 18% 100%);
+  padding:0 310px 0 340px;
+}
+
+/* ─── TEXT ─── */
+.sc-team-name{
+  font-family:var(--font);font-size:34px;font-weight:900;color:#fff;
+  letter-spacing:0.08em;text-transform:uppercase;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  max-width:55%;
+}
+.sc-team-score{font-family:var(--font);font-size:34px;font-weight:900;color:#fff;white-space:nowrap;}
+.sc-overs     {font-size:22px;font-weight:700;opacity:0.85;}
+
+/* ═══════════════════════════════════════════════════
+   BLACK STRIP — cascade: +3% wider than ribbon
+   ═══════════════════════════════════════════════════ */
+.sc-strip{background:var(--black);height:30px;position:relative;z-index:2;margin-top:-6px;}
+.sc-strip--right{clip-path:polygon(0 0, 75% 0, 85% 100%, 0 100%);}
+.sc-strip--left {clip-path:polygon(25% 0, 100% 0, 100% 100%, 15% 100%);}
+
+/* ═══════════════════════════════════════════════════
+   BLUE STATS — cascade: +8% wider than ribbon (widest)
+   ═══════════════════════════════════════════════════ */
+.sc-stats{
+  background:var(--blue);position:relative;z-index:1;
+  margin-top:-6px;min-height:260px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.sc-stats--right{
+  clip-path:polygon(0 0, 80% 0, 90% 100%, 0 100%);
+  padding:30px 220px 30px 310px;
+}
+.sc-stats--left{
+  clip-path:polygon(20% 0, 100% 0, 100% 100%, 10% 100%);
+  padding:30px 310px 30px 260px;
+}
+
+/* ─── BATSMAN STATS ─── */
+.sc-batsmen{display:flex;flex-direction:column;gap:14px;}
+.sc-batsman-row{display:flex;align-items:center;justify-content:space-between;}
+.sc-batsman-name{font-family:var(--font);font-size:30px;font-weight:800;color:#000;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;}
+.sc-batsman-runs{font-family:var(--font);font-size:34px;font-weight:900;color:#000;}
+
+/* ─── BOWLER STATS ─── */
+.sc-bowler-row{display:flex;align-items:center;justify-content:space-between;}
+.sc-bowler-name{font-family:var(--font);font-size:30px;font-weight:900;color:#000;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50%;}
+.sc-bowler-figs{display:flex;gap:28px;}
+.sc-fig{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.sc-fig-label{font-family:var(--font);font-size:20px;font-weight:700;color:rgba(0,0,0,0.55);text-transform:uppercase;}
+.sc-fig-val  {font-family:var(--font);font-size:34px;font-weight:900;color:#000;}
+
+.sc-divider{width:60%;height:2px;background:rgba(0,0,0,0.2);margin-top:16px;}
+
+/* ─── PAGINATION DOTS ─── */
+.sc-dots{display:flex;justify-content:center;gap:16px;padding:20px 0;}
+.sc-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.3);transition:background 0.3s;}
+.sc-dot--active{background:#fff;}

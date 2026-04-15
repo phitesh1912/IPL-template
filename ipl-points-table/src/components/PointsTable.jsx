@@ -2,116 +2,101 @@ import { useState, useEffect, useRef } from 'react';
 import './PointsTable.css';
 import pointsData from '../data/points.json';
 
-function PointsTable({ data = pointsData, campaignWidth = '80%' }) {
+function PointsTable({ data = pointsData }) {
+
   const hostRef = useRef(null);
-  const [scale, setScale] = useState(1);
+  const [layout, setLayout] = useState({ scale: 1, left: 0, top: 0 });
 
   useEffect(() => {
-    function computeScale() {
+    function computeLayout() {
       if (!hostRef.current) return;
-      const hostW = hostRef.current.clientWidth;
-      const hostH = hostRef.current.clientHeight;
-      const fraction = parseFloat(campaignWidth) / 100;
-      const BASE_W = 1920;
-      const BASE_H = 1080;
-      const fit = Math.min(hostW / BASE_W, hostH / BASE_H);
-      const cover = Math.max(hostW / BASE_W, hostH / BASE_H);
-      const base = fraction >= 0.999 ? cover : fit;
-      setScale(base * fraction);
+      const hostRect = hostRef.current.getBoundingClientRect();
+      const hostW = hostRect.width;
+      const hostH = hostRect.height;
+      const baseW = 1920;
+      const baseH = 1080;
+      const scale = Math.max(hostW / baseW, hostH / baseH);
+
+      // Uniform cover scale: both axes zoom equally.
+      // If aspect ratios differ, overflow is cropped (no black bars).
+      setLayout({
+        scale,
+        left: (hostW - baseW * scale) / 2,
+        top: (hostH - baseH * scale) / 2,
+      });
     }
-    computeScale();
-    const ro = new ResizeObserver(computeScale);
+    computeLayout();
+
+    const ro = new ResizeObserver(computeLayout);
     ro.observe(hostRef.current);
-    return () => ro.disconnect();
-  }, [campaignWidth]);
+    window.addEventListener('resize', computeLayout);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', computeLayout);
+    };
+  }, []);
 
   const allTeams = data?.groups?.flatMap(g => g.team) ?? [];
   const [teamOffset, setTeamOffset] = useState(0);
   const [isFading,   setIsFading]   = useState(false);
 
-  const ROWS_PER_PAGE = 2;
-  const pageTeams = Array.from({ length: ROWS_PER_PAGE }, (_, i) => (
-    allTeams[(teamOffset + i) % (allTeams.length || 1)]
-  ));
+  const twoTeams = [
+    allTeams[teamOffset % allTeams.length],
+    allTeams[(teamOffset + 1) % allTeams.length],
+  ];
 
   useEffect(() => {
     if (!allTeams.length) return;
     const interval = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
-        setTeamOffset(prev => (prev + ROWS_PER_PAGE) % allTeams.length);
+        setTeamOffset(prev => (prev + 2) % allTeams.length);
         setIsFading(false);
       }, 350);
     }, 2200);
     return () => clearInterval(interval);
   }, [allTeams.length]);
 
-  const [logoError, setLogoError] = useState(false);
-  const [titleError, setTitleError] = useState(false);
-
   return (
-    <div className="pt-scale-host" ref={hostRef}>
-      <div className="pt-canvas" style={{ transform:`translate(-50%, -50%) scale(${scale})` }}>
+    <div className="pt-host" ref={hostRef}>
+      <div className="pt-canvas" style={{
+        transform: `scale(${layout.scale})`,
+        transformOrigin: 'top left',
+        left: layout.left,
+        top: layout.top,
+      }}>
         <div className="pt-left">
-          <div className="pt-glass pt-glass--pos">
-            <div className="pt-titlebar">
-              {titleError ? (
-                <div className="pt-titlebar-fallback">
-                  <span className="pt-titlebar-text">POINTS TABLE</span>
-                  <span className="pt-titlebar-dot" aria-hidden="true" />
-                </div>
-              ) : (
-                <img
-                  className="pt-titlebar-img"
-                  src="/assets/points-title.png"
-                  alt="Points Table"
-                  onError={() => setTitleError(true)}
-                />
-              )}
+          <div className="pt-glass">
+
+            <div className="pt-title">
+              <img src="/assets/points-title.png" alt="Points Table"
+                onError={e=>{e.currentTarget.style.display='none'}}/>
             </div>
 
-            <div className="pt-headerbar" aria-label="Points table header">
-              <div className="pt-headerbar-cell pt-headerbar-cell--team">TEAM</div>
-              <div className="pt-headerbar-cell">PLD</div>
-              <div className="pt-headerbar-cell">W</div>
-              <div className="pt-headerbar-cell">L</div>
-              <div className="pt-headerbar-cell">PTS</div>
+            <div className="pt-header">
+              <div className="pt-header-cell">TEAM</div>
+              <div className="pt-header-cell">PLD</div>
+              <div className="pt-header-cell">W</div>
+              <div className="pt-header-cell">L</div>
+              <div className="pt-header-cell">PTS</div>
             </div>
 
-            <div className={`pt-banners ${isFading ? 'fade-out' : 'fade-in'}`}>
-              {pageTeams.filter(Boolean).map((team, index) => (
-                <div
-                  key={team?.id ?? `${team?.name}-${index}`}
-                  className={`pt-banner ${index % 2 === 0 ? 'pt-banner--light' : 'pt-banner--dark'}`}
-                >
-                  <div className="pt-banner-team">{team?.name ?? '—'}</div>
-                  <div className="pt-banner-stats">
-                    <div className="pt-banner-stat">{team?.games ?? '—'}</div>
-                    <div className="pt-banner-stat">{team?.won ?? '—'}</div>
-                    <div className="pt-banner-stat">{team?.lost ?? '—'}</div>
-                    <div className="pt-banner-stat">{team?.points ?? '—'}</div>
-                  </div>
+            <div className={`pt-rows ${isFading?'fade-out':'fade-in'}`}>
+              {twoTeams.map((team, index) => (
+                <div key={team?.id ?? index}
+                  className={`pt-row ${index%2===0
+                    ? 'pt-row--blue pt-row--skew-right'
+                    : 'pt-row--navy pt-row--skew-left'}`}>
+                  <div className="pt-row-cell">{team?.name}</div>
+                  <div className="pt-row-cell">{team?.games}</div>
+                  <div className="pt-row-cell">{team?.won}</div>
+                  <div className="pt-row-cell">{team?.lost}</div>
+                  <div className="pt-row-cell">{team?.points}</div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
 
-        <div className="pt-right" aria-label="Branding panel">
-          <div className="pt-branding-block">
-            <div className="pt-branding-label">brought to you by</div>
-            {logoError ? (
-              <div className="pt-branding-logo-fallback" aria-label="Times OOH">
-                TIMES OOH
-              </div>
-            ) : (
-              <img
-                className="pt-branding-logo"
-                src="/assets/times-ooh-logo.png"
-                alt="Times OOH"
-                onError={() => setLogoError(true)}
-              />
-            )}
           </div>
         </div>
       </div>
