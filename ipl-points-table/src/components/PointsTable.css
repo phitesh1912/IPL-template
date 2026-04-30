@@ -31,8 +31,8 @@ html,body,#root{
 
 /* CANVAS — 1920×1080 design space, stretched by JS to fill host */
 .pt-canvas{
-  width:1920px;
-  height:1080px;
+  width:1080px;
+  height:1920px;
   display:flex;
   flex-direction:row;
   transform-origin:top left;
@@ -49,23 +49,24 @@ html,body,#root{
   height:100%;
   position:relative;
   background-image:url('/assets/stadium-bg.png');
-  background-size:cover;
+  background-size:100% 100%;
   background-position:center;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  padding:48px 60px;
+  padding:100px 44px 54px;
   overflow:hidden;
 }
 
 /* GLASS */
 .pt-glass{
   width:100%;
+  height:100%;
   background:transparent;
-  border-radius:22px;
-  border:1.5px solid rgba(255,255,255,0.18);
-  box-shadow:0 8px 48px rgba(0,0,0,0.7);
-  padding:3.2vh 2.4vw 3.6vh 2.4vw;
+  border-radius:0;
+  border:none;
+  box-shadow:none;
+  padding:0;
   display:flex;
   flex-direction:column;
 }
@@ -75,12 +76,12 @@ html,body,#root{
   display:flex;
   justify-content:center;
   align-items:center;
-  margin-bottom:2.4vh;
+  margin-bottom:34px;
 }
 .pt-title img{
-  height:18.4vh;
+  height:246px;
   width:auto;
-  max-width:40%;
+  max-width:62%;
   object-fit:contain;
 }
 
@@ -92,14 +93,14 @@ html,body,#root{
   background:var(--red);
   color:#fff;
   font-family:var(--font);
-  font-size:2.4vh;
+  font-size:50px;
   font-weight:900;
-  letter-spacing:0.18em;
+  letter-spacing:0.06em;
   text-transform:uppercase;
-  padding:0 2.8vw;
-  height:7.4vh;
+  padding:0 34px;
+  height:102px;
   border-radius:4px;
-  margin-bottom:0.8vh;
+  margin-bottom:24px;
 }
 
 .pt-header-cell{
@@ -113,22 +114,22 @@ html,body,#root{
   position:absolute;
   right:0; top:50%;
   transform:translateY(-50%);
-  height:2.4vh; width:2px;
+  height:56px; width:2px;
   background:rgba(255,255,255,0.55);
 }
 .pt-header-cell:first-child{justify-content:flex-start;}
 
 /* ROWS */
-.pt-rows{display:flex;flex-direction:column;gap:0.8vh;}
+.pt-rows{display:flex;flex-direction:column;gap:20px;}
 
 .pt-row{
   display:grid;
   grid-template-columns:2.2fr 1fr 1fr 1fr 1fr;
   align-items:center;
-  height:10.2vh;
-  padding:0 2.8vw;
+  height:118px;
+  padding:0 34px;
   font-family:var(--font);
-  font-size:2.2vh;
+  font-size:56px;
   font-weight:700;
   letter-spacing:0.04em;
   animation:rowIn 0.5s ease both;
@@ -146,7 +147,7 @@ html,body,#root{
 }
 
 .pt-row-cell{text-align:center;}
-.pt-row-cell:first-child{text-align:left;font-size:2vh;}
+.pt-row-cell:first-child{text-align:left;font-size:50px;}
 
 .fade-out{opacity:0;transform:translateY(10px);transition:all 0.3s ease;}
 .fade-in {opacity:1;transform:translateY(0);   transition:all 0.3s ease;}

@@ -5,7 +5,7 @@ import pointsData from '../data/points.json';
 function PointsTable({ data = pointsData }) {
 
   const hostRef = useRef(null);
-  const [layout, setLayout] = useState({ scale: 1, left: 0, top: 0 });
+  const [layout, setLayout] = useState({ scaleX: 1, scaleY: 1, left: 0, top: 0 });
 
   useEffect(() => {
     function computeLayout() {
@@ -13,16 +13,18 @@ function PointsTable({ data = pointsData }) {
       const hostRect = hostRef.current.getBoundingClientRect();
       const hostW = hostRect.width;
       const hostH = hostRect.height;
-      const baseW = 1920;
-      const baseH = 1080;
-      const scale = Math.max(hostW / baseW, hostH / baseH);
+      const baseW = 1080;
+      const baseH = 1920;
+      const scaleX = hostW / baseW;
+      const scaleY = hostH / baseH;
 
-      // Uniform cover scale: both axes zoom equally.
-      // If aspect ratios differ, overflow is cropped (no black bars).
+      // Full-viewport stretch scale: template fills host completely.
+      // Keeps the full template visible with no letterboxing.
       setLayout({
-        scale,
-        left: (hostW - baseW * scale) / 2,
-        top: (hostH - baseH * scale) / 2,
+        scaleX,
+        scaleY,
+        left: 0,
+        top: 0,
       });
     }
     computeLayout();
@@ -61,7 +63,7 @@ function PointsTable({ data = pointsData }) {
   return (
     <div className="pt-host" ref={hostRef}>
       <div className="pt-canvas" style={{
-        transform: `scale(${layout.scale})`,
+        transform: `scale(${layout.scaleX}, ${layout.scaleY})`,
         transformOrigin: 'top left',
         left: layout.left,
         top: layout.top,
