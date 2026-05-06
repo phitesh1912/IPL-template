@@ -3,10 +3,21 @@ import './ScoreCard.css';
 import scoreData from '../data/score.json';
 
 function ScoreCard({ data = scoreData, matchId }) {
-  const midQuery = typeof window !== 'undefined'
-    ? new URLSearchParams(window.location.search).get('mid')
+  const searchParams = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search)
     : null;
-  const effectiveMid = String(matchId ?? midQuery ?? '').trim();
+  const midQuery = searchParams ? searchParams.get('mid') : null;
+  const rotateQuery = searchParams ? searchParams.get('rotate') : null;
+
+  const rawMid = String(matchId ?? midQuery ?? '').trim();
+  const normalizedMid = rawMid.toLowerCase();
+  const wantsRotateAll =
+    normalizedMid === 'all' ||
+    normalizedMid === 'rotate' ||
+    normalizedMid === '*' ||
+    (rotateQuery && rotateQuery !== '0' && rotateQuery.toLowerCase() !== 'false');
+
+  const effectiveMid = wantsRotateAll ? '' : rawMid;
 
   const hostRef = useRef(null);
   const [layout, setLayout] = useState({ scaleX: 1, scaleY: 1 });

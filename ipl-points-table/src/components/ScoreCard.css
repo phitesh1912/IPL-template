@@ -87,11 +87,12 @@ html, body, #root {
 .sc-lower { position: absolute; inset: 0; }
 
 /* The Bottom Black Banner Box */
+/* ── FIX: Push 'Yet to bat' down into the black box ── */
 .sc-lower-black {
   position: absolute;
-  left: 50px;
-  top: 1005px;
-  width: 350px;
+  left: 0;         /* Pushes it flush to the left edge of the screen */
+  top: 1080px;     /* Match this number to whatever your .sc-lower-red 'top' is! */
+  width: 450px;    /* Makes the box wide enough to center the text nicely */
   height: 86px;
   display: flex;
   align-items: center;
