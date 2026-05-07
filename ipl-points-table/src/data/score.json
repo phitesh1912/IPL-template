@@ -1,54 +1,56 @@
 {
-  "5711": {
-    "id": "5711",
-    "name": "National Super League 4-Day Tournament - Test",
+  "1529291": {
+    "id": "1529291",
+    "name": "Indian Premier League 2026 - T20 - 48th Match",
     "batsmanstats": {
       "batsman_0": {
-        "batsmanname": "RK Chandraguptha",
-        "run": "83"
+        "batsmanname": "Sanju Samson",
+        "run": "87*"
       },
       "batsman_1": {
-        "batsmanname": "KPNM Karunanayake",
-        "run": "61"
+        "batsmanname": "Kartik Sharma",
+        "run": "41*"
       },
-      "battingscore": "209 ( 63 )",
+      "battingscore": "159 ( 17.3 )",
       "battingwicket": "2",
-      "teamname": "Jaffna"
+      "teamname": "Chennai Super Kings"
     },
     "bowlerstats": {
-      "bowler": "Nuwanidu Fernando",
+      "bowler": "Noor Ahmad",
       "o": "3",
-      "m": "1",
-      "r": "3",
-      "w": "0",
-      "teamname": "Colombo"
+      "m": "0",
+      "r": "22",
+      "w": "2",
+      "bowlerstatsscore": "155 ( 20 )",
+      "bowlerstatswicket": "7",
+      "teamname": "Delhi Capitals"
     }
   },
-  "7049": {
-    "id": "7049",
-    "name": "Koshi Province Trophy (KPT) National T20 Cricket Tournament - T20",
+  "1529292": {
+    "id": "1529292",
+    "name": "Indian Premier League 2026 - T20 - 49th Match",
     "batsmanstats": {
       "batsman_0": {
-        "batsmanname": "Rohan Bk",
-        "run": "5"
+        "batsmanname": "Cooper Connolly",
+        "run": "107*"
       },
       "batsman_1": {
-        "batsmanname": "D Nath",
-        "run": "2"
+        "batsmanname": "Suryansh Shedge",
+        "run": "34"
       },
-      "battingscore": "8 ( 0.4 )",
-      "battingwicket": "0",
-      "teamname": "Nepal Police Club"
+      "battingscore": "202 ( 20 )",
+      "battingwicket": "7",
+      "teamname": "Punjab Kings"
     },
     "bowlerstats": {
-      "bowler": "Dipesh Shrestha",
-      "o": "0.4",
+      "bowler": "Pat Cummins",
+      "o": "4",
       "m": "0",
-      "r": "8",
-      "w": "0",
-      "bowlerstatsscore": "173 ( 20 )",
-      "bowlerstatswicket": "7",
-      "teamname": "Bagmati Province"
+      "r": "34",
+      "w": "2",
+      "bowlerstatsscore": "235 ( 20 )",
+      "bowlerstatswicket": "4",
+      "teamname": "Sunrisers Hyderabad"
     }
   }
 }
