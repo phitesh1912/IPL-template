@@ -15,16 +15,20 @@ function PointsTable({ data = pointsData }) {
       const hostH = hostRect.height;
       const baseW = 1080;
       const baseH = 1920;
-      const scaleX = hostW / baseW;
-      const scaleY = hostH / baseH;
 
-      // Full-viewport stretch scale: template fills host completely.
-      // Keeps the full template visible with no letterboxing.
+      // Preserve aspect ratio: uniform scale so the template stays proportional
+      // and is centered in the host (letterbox / pillarbox as needed).
+      const scale = Math.min(hostW / baseW, hostH / baseH);
+      const canvasW = baseW * scale;
+      const canvasH = baseH * scale;
+      const left = Math.round((hostW - canvasW) / 2);
+      const top = Math.round((hostH - canvasH) / 2);
+
       setLayout({
-        scaleX,
-        scaleY,
-        left: 0,
-        top: 0,
+        scaleX: scale,
+        scaleY: scale,
+        left,
+        top,
       });
     }
     computeLayout();

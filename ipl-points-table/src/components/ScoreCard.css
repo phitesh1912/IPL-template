@@ -154,9 +154,9 @@ html, body, #root {
 /* ── FIX: Push the grouped block down to the line ── */
 /* ── FIX: Straddle the background line ── */
 .sc-blue-text--upper {
-  left: 380px;   
+  left: 300px;   
   top: 720px;    /* <-- Pulled UP slightly so the gap lands on the background line */
-  width: 260px;  
+  width: 520px;  /* wider so long player names fit on one line */
   height: auto;
   padding: 0;
   display: flex;
@@ -186,10 +186,11 @@ html, body, #root {
 }
 
 .sc-player-name {
-  max-width: 75%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* allow full player names to show; wrap if necessary */
+  max-width: none;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
 }
 
 .sc-player-val {
